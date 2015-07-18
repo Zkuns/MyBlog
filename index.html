@@ -136,8 +136,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/07/17/first/">
-                rails rspec测试使用seed文件添加基本测试数据
+              <a class="post-title-link" href="/2015/07/18/post2/">
+                在ubuntu14.04下安装pptp vpn服务
               </a>
             
           
@@ -146,7 +146,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-07-17
+          发表于 2015-07-18
         </span>
 
         
@@ -155,8 +155,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/07/17/first/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/07/17/first/"></span>
+            <a href="/2015/07/18/post2/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/07/18/post2/"></span>
             </a>
           </span>
           
@@ -171,14 +171,12 @@
 
       
         
-          <h3 id="都怪当年太年轻">都怪当年太年轻</h3><p>参与了一个项目的制作，当时为了项目的速度，导致里面的脏代码太多，而且当时也没有写上测试，所以项目现在不能看。好吧是我写测试没有坚持下去。</p>
-<p>现在开始重构代码了，补上测试，脏代码也要完全改过。好苦逼啊！不过自己挖的坑终究是要自己来填的。</p>
-<h3 id="使用">使用</h3><p>项目model层的关系有些复杂，有的model是依赖一些model才能创建，往往创建一个对象会链锁反应需要创建一堆的对象，而且测试需要的对象所要的依赖大多都不相同。所以找了个办法使用了seeds文件在每次执行测试之前添加测试数据。</p>
-<p>首先创建seed文件，当然你可以随便取名字只要.rb结尾</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ rails_app_path/db/<span class="built_in">test</span>_seeds.rb</span><br></pre></td></tr></table></figure>
-<p>然后打开你的spec_helper.rb文件加入以下内容<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">RSpec</span>.configure <span class="keyword">do</span> |config|</span><br><span class="line">  config.before(<span class="symbol">:suite</span>) <span class="keyword">do</span></span><br><span class="line">    load <span class="string">"<span class="subst">#&#123;<span class="constant">Rails</span>.root&#125;</span>/db/test_seeds.rb"</span></span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure></p>
-<p>然后你每次的运行测试之前都会将这个seeds文件先执行一遍。这时候你就可以使用DatabaseCleaner每次执行测试前将数据库内容清空</p>
-
+          <p><img src="/img/post2.jpg" alt="head_image"><br>最近自己想搭一个vpn服务给手机用，网上一搜教程一大堆，但是也有一些坑，还好找到一个靠谱的搭建教程，以下就是我的搭建过程。<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/07/18/post2/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>
@@ -208,8 +206,8 @@
           
           
             
-              <a class="post-title-link" href="/2015/07/06/hello-world/">
-                Hello World
+              <a class="post-title-link" href="/2015/07/16/first/">
+                rails rspec测试使用seed文件添加基本测试数据
               </a>
             
           
@@ -218,7 +216,7 @@
 
       <div class="post-meta">
         <span class="post-time">
-          发表于 2015-07-06
+          发表于 2015-07-16
         </span>
 
         
@@ -227,8 +225,8 @@
           
             <span class="post-comments-count">
             &nbsp; | &nbsp;
-            <a href="/2015/07/06/hello-world/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/07/06/hello-world/"></span>
+            <a href="/2015/07/16/first/#comments" >
+              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/07/16/first/"></span>
             </a>
           </span>
           
@@ -243,16 +241,12 @@
 
       
         
-          <p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-
+          <p><img src="/img/post1.jpg" alt="head_image"><br>因为当初不写测试<br>
+          <div class="post-more-link text-center">
+            <a class="btn" href="/2015/07/16/first/#more">
+              阅读全文 &raquo;
+            </a>
+          </div>
         
       
     </div>

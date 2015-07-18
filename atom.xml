@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2015-07-16T18:13:02.000Z</updated>
+  <updated>2015-07-18T16:12:08.000Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -16,12 +16,48 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[在ubuntu14.04下安装pptp vpn服务]]></title>
+    <link href="http://yoursite.com/2015/07/18/post2/"/>
+    <id>http://yoursite.com/2015/07/18/post2/</id>
+    <published>2015-07-18T15:41:09.000Z</published>
+    <updated>2015-07-18T16:12:08.000Z</updated>
+    <content type="html"><![CDATA[<p><img src="/img/post2.jpg" alt="head_image"><br>最近自己想搭一个vpn服务给手机用，网上一搜教程一大堆，但是也有一些坑，还好找到一个靠谱的搭建教程，以下就是我的搭建过程。<br><a id="more"></a></p>
+<h3 id="需要">需要</h3><p>  一台能访问外网的服务器，还有。。。没有了。</p>
+<p>  什么你没有服务器，好吧，买一个吧，推荐一个国外的<a href="https://bandwagonhost.com/cart.php?a=confproduct&amp;i=0" target="_blank" rel="external">vps</a>,因为只需要搭建一个vpn所以买个低配的就行了.</p>
+<h3 id="开始">开始</h3><h5 id="第一步">第一步</h5><p>ssh上去，首先安装pptp<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install pptpd</span><br></pre></td></tr></table></figure></p>
+<h5 id="第二步">第二步</h5><p>安装完后编辑pptp.conf配置文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/pptpd.conf</span><br></pre></td></tr></table></figure></p>
+<p>在当前文件下写入以下配置<br><figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">option</span> /etc/ppp/pptpd-options                    <span class="comment">#指定PPP选项文件的位置</span></span><br><span class="line"><span class="built_in">debug</span>                                           <span class="comment">#启用调试模式</span></span><br><span class="line">localip <span class="number">192.168.0.1</span>                             <span class="comment">#VPN服务器的虚拟ip</span></span><br><span class="line">remoteip <span class="number">192.168.0.200</span>-<span class="number">238</span>,<span class="number">192.168.0.245</span>        <span class="comment">#分配给VPN客户端的虚拟ip</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="第三步">第三步</h5><p>编辑PPP选项配置文件<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/ppp/pptpd-options</span><br></pre></td></tr></table></figure></p>
+<p>写入以下配置<br><figure class="highlight perl"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">name pptpd                      <span class="comment">#pptpd服务的名称</span></span><br><span class="line">refuse-pap                      <span class="comment">#拒绝pap身份认证模式</span></span><br><span class="line">refuse-chap                     <span class="comment">#拒绝chap身份认证模式</span></span><br><span class="line">refuse-mschap                   <span class="comment">#拒绝mschap身份认证模式</span></span><br><span class="line"><span class="keyword">require</span>-mschap-v2               <span class="comment">#允许mschap-v2身份认证模式</span></span><br><span class="line"><span class="keyword">require</span>-mppe-<span class="number">128</span>                <span class="comment">#允许mppe 128位加密身份认证模式</span></span><br><span class="line">ms-dns <span class="number">8.8</span>.<span class="number">8.8</span>                  <span class="comment">#使用Google DNS</span></span><br><span class="line">ms-dns <span class="number">8.8</span>.<span class="number">4.4</span>                  <span class="comment">#使用Google DNS</span></span><br><span class="line">proxyarp                        <span class="comment">#arp代理</span></span><br><span class="line">debug                           <span class="comment">#调试模式</span></span><br><span class="line"><span class="keyword">dump</span>                            <span class="comment">#服务启动时打印出所有配置信息</span></span><br><span class="line">lock                            <span class="comment">#锁定TTY设备</span></span><br><span class="line">nobsdcomp                       <span class="comment">#禁用BSD压缩模式</span></span><br><span class="line">logfile /var/<span class="keyword">log</span>/pptpd.<span class="keyword">log</span>      <span class="comment">#输出日志文件位置</span></span><br></pre></td></tr></table></figure></p>
+<h5 id="第四步">第四步</h5><p>建立你的vpn的账户,编辑用户配置<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo vi /etc/ppp/chap-secrets</span><br></pre></td></tr></table></figure></p>
+<p>添加的格式如下</p>
+<p>#用户名  &nbsp;&nbsp;&nbsp; 服务类型  &nbsp;&nbsp;&nbsp; 密码 &nbsp;&nbsp;&nbsp;&nbsp;  分配的ip地址</p>
+<p>test&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1234&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*</p>
+<p>重启pptpd<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo service pptpd restart</span><br></pre></td></tr></table></figure></p>
+<h5 id="第五步">第五步</h5><p>配置网络和路由规则 设置ipv4转发<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo sed -i <span class="string">'s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g'</span> /etc/sysctl.conf</span><br><span class="line">sudo sysctl -p</span><br></pre></td></tr></table></figure></p>
+<p>sudo sysctl -p 使用这条命令的时候可能会报错<br>error: permission denied on key ‘net.nf_conntrack_max’</p>
+<p>解决办法,运行完下面的命令后再执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rm <span class="operator">-f</span> /sbin/modprobe</span><br><span class="line">ln <span class="operator">-s</span> /bin/<span class="literal">true</span> /sbin/modprobe</span><br><span class="line">rm <span class="operator">-f</span> /sbin/sysctl</span><br><span class="line">ln <span class="operator">-s</span> /bin/<span class="literal">true</span> /sbin/sysctl</span><br></pre></td></tr></table></figure></p>
+<h5 id="第六步">第六步</h5><p>设置iptables, 首先是使用ifconfig来查询你的外网网卡是哪个，我这里是venen0,查看到你的网卡后将你的网卡名替换到下面的命令中</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t nat -A POSTROUTING <span class="operator">-s</span> <span class="number">192.168</span>.<span class="number">0.0</span>/<span class="number">24</span> -o venen0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+<p>因为iptable的配置在服务器重启后都会重置，所以我们可以将当前的命令加入到/etc/rc.local中这样每次启动都会执行</p>
+<h3 id="结束">结束</h3><p>搭建完成现在可以放心使用，如果发现可以连接上vpn但是访问不了外网，那就可能是第六步iptables的配置有问题，建议换个网卡名试试。</p>
+<p>头图来自<a href="http://www.haiwaitoutiao.com/?p=328156" target="_blank" rel="external">海外头条</a> 侵删</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><img src="/img/post2.jpg" alt="head_image"><br>最近自己想搭一个vpn服务给手机用，网上一搜教程一大堆，但是也有一些坑，还好找到一个靠谱的搭建教程，以下就是我的搭建过程。<br>]]>
+    
+    </summary>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[rails rspec测试使用seed文件添加基本测试数据]]></title>
-    <link href="http://yoursite.com/2015/07/17/first/"/>
-    <id>http://yoursite.com/2015/07/17/first/</id>
-    <published>2015-07-16T18:13:02.000Z</published>
-    <updated>2015-07-16T18:13:02.000Z</updated>
-    <content type="html"><![CDATA[<h3 id="都怪当年太年轻">都怪当年太年轻</h3><p>参与了一个项目的制作，当时为了项目的速度，导致里面的脏代码太多，而且当时也没有写上测试，所以项目现在不能看。好吧是我写测试没有坚持下去。</p>
+    <link href="http://yoursite.com/2015/07/16/first/"/>
+    <id>http://yoursite.com/2015/07/16/first/</id>
+    <published>2015-07-16T12:41:09.000Z</published>
+    <updated>2015-07-18T16:28:34.000Z</updated>
+    <content type="html"><![CDATA[<p><img src="/img/post1.jpg" alt="head_image"><br>因为当初不写测试<br><a id="more"></a></p>
+<p>参与了一个项目的制作，当时为了项目的速度，导致里面的脏代码太多，而且当时也没有写上测试，所以项目现在不能看。好吧是我写测试没有坚持下去。</p>
 <p>现在开始重构代码了，补上测试，脏代码也要完全改过。好苦逼啊！不过自己挖的坑终究是要自己来填的。</p>
 <h3 id="使用">使用</h3><p>项目model层的关系有些复杂，有的model是依赖一些model才能创建，往往创建一个对象会链锁反应需要创建一堆的对象，而且测试需要的对象所要的依赖大多都不相同。所以找了个办法使用了seeds文件在每次执行测试之前添加测试数据。</p>
 <p>首先创建seed文件，当然你可以随便取名字只要.rb结尾</p>
@@ -30,30 +66,8 @@
 <p>然后你每次的运行测试之前都会将这个seeds文件先执行一遍。这时候你就可以使用DatabaseCleaner每次执行测试前将数据库内容清空</p>
 ]]></content>
     <summary type="html">
-    <![CDATA[<h3 id="都怪当年太年轻">都怪当年太年轻</h3><p>参与了一个项目的制作，当时为了项目的速度，导致里面的脏代码太多，而且当时也没有写上测试，所以项目现在不能看。好吧是我写测试没有坚持下去。</p>
-<p>现在开始重构代码了，补上测试，脏代码也要完全改过。好苦逼啊！不过]]>
-    </summary>
+    <![CDATA[<p><img src="/img/post1.jpg" alt="head_image"><br>因为当初不写测试<br>]]>
     
-  </entry>
-  
-  <entry>
-    <title><![CDATA[Hello World]]></title>
-    <link href="http://yoursite.com/2015/07/06/hello-world/"/>
-    <id>http://yoursite.com/2015/07/06/hello-world/</id>
-    <published>2015-07-06T08:52:23.000Z</published>
-    <updated>2015-07-06T08:52:23.000Z</updated>
-    <content type="html"><![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io/docs/" target="_blank" rel="external">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="http://hexo.io/docs/troubleshooting.html" target="_blank" rel="external">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="external">GitHub</a>.</p>
-<h2 id="Quick_Start">Quick Start</h2><h3 id="Create_a_new_post">Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/writing.html" target="_blank" rel="external">Writing</a></p>
-<h3 id="Run_server">Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/server.html" target="_blank" rel="external">Server</a></p>
-<h3 id="Generate_static_files">Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/generating.html" target="_blank" rel="external">Generating</a></p>
-<h3 id="Deploy_to_remote_sites">Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-<p>More info: <a href="http://hexo.io/docs/deployment.html" target="_blank" rel="external">Deployment</a></p>
-]]></content>
-    <summary type="html">
-    <![CDATA[<p>Welcome to <a href="http://hexo.io/" target="_blank" rel="external">Hexo</a>! This is your very first post. Check <a href="http://hexo.io]]>
     </summary>
     
   </entry>
