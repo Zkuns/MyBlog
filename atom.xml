@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2015-07-26T07:13:47.000Z</updated>
+  <updated>2015-07-26T07:16:11.000Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[使用factory\_girl\_seeds添加测试种子数据]]></title>
+    <title><![CDATA[使用factory_girl_seeds添加测试种子数据]]></title>
     <link href="http://yoursite.com/2015/07/26/post3/"/>
     <id>http://yoursite.com/2015/07/26/post3/</id>
     <published>2015-07-26T03:37:55.000Z</published>
-    <updated>2015-07-26T07:13:47.000Z</updated>
+    <updated>2015-07-26T07:16:11.000Z</updated>
     <content type="html"><![CDATA[<p><img src="/img/post3.jpg" alt="head_image"><br>之前写过一篇创建测试的种子数据，但是那种方法有一些缺陷，所以现在改成使用factory_girl_seed来创建种子数据。<br><a id="more"></a></p>
 <h3 id="原因">原因</h3><p>之前写过一篇创建测试种子文件的blog，虽然创建成功了，但是使用起来还是有些麻烦，因为数据创建，但是创建的数据没有创建数据引用.<br>比如说创建了一个user 使用的时候还是要用User.find_by_email(..)等代码查询出来。我需要直接使用它。不想多写代码，怎们办那就要用到factory_girl_seeds。</p>
 <h3 id="factory_girl_seeds使用">factory_girl_seeds使用</h3><p><a href="https://github.com/evrone/factory_girl-seeds" target="_blank" rel="external">factory_girl_seed的github首页</a></p>
