@@ -47,7 +47,7 @@
     <link href="http://yoursite.com/2015/07/18/post2/"/>
     <id>http://yoursite.com/2015/07/18/post2/</id>
     <published>2015-07-18T15:41:09.000Z</published>
-    <updated>2015-07-26T03:48:42.000Z</updated>
+    <updated>2015-07-29T00:57:23.000Z</updated>
     <content type="html"><![CDATA[<p><img src="/img/post2.jpg" alt="head_image"><br>最近自己想搭一个vpn服务给手机用，网上一搜教程一大堆，但是也有一些坑，还好找到一个靠谱的搭建教程，以下就是我的搭建过程。<br><a id="more"></a></p>
 <h3 id="需要">需要</h3><p>  一台能访问外网的服务器，还有。。。没有了。</p>
 <p>  什么你没有服务器，好吧，买一个吧，推荐一个国外的<a href="https://bandwagonhost.com/cart.php?a=confproduct&amp;i=0" target="_blank" rel="external">vps</a>,因为只需要搭建一个vpn所以买个低配的就行了.</p>
@@ -65,7 +65,7 @@
 <p>sudo sysctl -p 使用这条命令的时候可能会报错<br>error: permission denied on key ‘net.nf_conntrack_max’</p>
 <p>解决办法,运行完下面的命令后再执行<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">rm <span class="operator">-f</span> /sbin/modprobe</span><br><span class="line">ln <span class="operator">-s</span> /bin/<span class="literal">true</span> /sbin/modprobe</span><br><span class="line">rm <span class="operator">-f</span> /sbin/sysctl</span><br><span class="line">ln <span class="operator">-s</span> /bin/<span class="literal">true</span> /sbin/sysctl</span><br></pre></td></tr></table></figure></p>
 <h5 id="第六步">第六步</h5><p>设置iptables, 首先是使用ifconfig来查询你的外网网卡是哪个，我这里是venen0,查看到你的网卡后将你的网卡名替换到下面的命令中</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables -t nat -A POSTROUTING <span class="operator">-s</span> <span class="number">192.168</span>.<span class="number">0.0</span>/<span class="number">24</span> -o venen0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo iptables --table nat --append POSTROUTING --out-interface ppp0 -j MASQUERADE</span><br><span class="line">sudo iptables -t nat -A POSTROUTING <span class="operator">-s</span> <span class="number">192.168</span>.<span class="number">0.0</span>/<span class="number">24</span> -o venen0 -j MASQUERADE</span><br></pre></td></tr></table></figure>
 <p>因为iptable的配置在服务器重启后都会重置，所以我们可以将当前的命令加入到/etc/rc.local中这样每次启动都会执行</p>
 <h3 id="结束">结束</h3><p>搭建完成现在可以放心使用，如果发现可以连接上vpn但是访问不了外网，那就可能是第六步iptables的配置有问题，建议换个网卡名试试。</p>
 <p>头图来自<a href="http://www.haiwaitoutiao.com/?p=328156" target="_blank" rel="external">海外头条</a> 侵删</p>
