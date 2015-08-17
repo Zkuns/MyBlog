@@ -2,6 +2,8 @@
 <html class="theme-next use-motion theme-next-mist">
 <head>
   
+    
+
 
 <meta charset="UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
@@ -47,7 +49,7 @@
 
 
 
-  <title> Zkun </title>
+  <title> Rails数据预加载 includes eager_load preload // Zkun </title>
 </head>
 
 <body>
@@ -61,9 +63,7 @@
   </div>
 <![endif]-->
 
-  <div class="container one-column 
-   page-home 
-">
+  <div class="container one-column page-post-detail">
     <div class="headband"></div>
 
     <div id="header" class="header">
@@ -123,9 +123,9 @@
       <div class="main-inner">
         <div id="content" class="content">
           
+
   <div id="posts" class="posts-expand">
     
-      
 
   <div class="post post-type-normal ">
     <div class="post-header">
@@ -136,9 +136,7 @@
           
           
             
-              <a class="post-title-link" href="/2015/08/17/post4_rails数据预加载/">
-                Rails数据预加载 includes eager_load preload
-              </a>
+              Rails数据预加载 includes eager_load preload
             
           
         </h1>
@@ -170,8 +168,7 @@
       
 
       
-        
-          <p><img src="/img/post4.jpg" alt="head_image"></p>
+        <p><img src="/img/post4.jpg" alt="head_image"></p>
 <p>前些天因为想减少站点的sql查询，过程中遇到些问题，搜解决办法时看到一篇文章，受益匪浅，想把自己的看完的理解总结然后分享一下，如果有不对的地方，求指导。</p>
 <p><a href="http://blog.arkency.com/2013/12/rails4-preloading" target="_blank" rel="external">原文章地址请点在这里</a></p>
 <h2 id="三种预加载方式">三种预加载方式</h2><p>我们在rails中有三种方式可以用来预加载数据，分别是 eager_load preload includes. 但是实际上预加载的方式就只有两种，preload和eager_load, 而includes是做什么的呢？它是内部自行判断，然后调用preload或是eager_load。</p>
@@ -209,7 +206,6 @@
 <p>使用eager_load效果</p>
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:popular_posts</span>)</span><br><span class="line"><span class="comment">#生成sql语句和下面一样，都是左链接</span></span><br><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:posts</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
 
-        
       
     </div>
 
@@ -217,229 +213,41 @@
       
 
       
+        <div class="post-nav">
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2015/07/26/post3/">使用factory_girl_seeds添加测试种子数据</a>
+            
+          </div>
+        </div>
+      
 
       
-      
-        <div class="post-eof"></div>
       
     </div>
   </div>
 
 
-    
+
+    <div class="post-spread">
       
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/07/26/post3/">
-                使用factory_girl_seeds添加测试种子数据
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-07-26
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/07/26/post3/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/07/26/post3/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
     </div>
 
-    <div class="post-body">
-
-      
-      
-
-      
+    
+      <div class="comments" id="comments">
         
-          <p><img src="/img/post3.jpg" alt="head_image"><br>之前写过一篇创建测试的种子数据，但是那种方法有一些缺陷，所以现在改成使用factory_girl_seed来创建种子数据。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/07/26/post3/#more">
-              阅读全文 &raquo;
-            </a>
+          <div id="disqus_thread">
+            <noscript>Please enable JavaScript to view the <a href="//disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
           </div>
         
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/07/18/post2/">
-                在ubuntu14.04下安装pptp vpn服务
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-07-18
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/07/18/post2/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/07/18/post2/"></span>
-            </a>
-          </span>
-          
-        
       </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><img src="/img/post2.jpg" alt="head_image"><br>最近自己想搭一个vpn服务给手机用，网上一搜教程一大堆，但是也有一些坑，还好找到一个靠谱的搭建教程，以下就是我的搭建过程。<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/07/18/post2/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
-    
-      
-
-  <div class="post post-type-normal ">
-    <div class="post-header">
-
-      
-      
-        <h1 class="post-title">
-          
-          
-            
-              <a class="post-title-link" href="/2015/07/16/first/">
-                rails rspec测试使用seed文件添加基本测试数据
-              </a>
-            
-          
-        </h1>
-      
-
-      <div class="post-meta">
-        <span class="post-time">
-          发表于 2015-07-16
-        </span>
-
-        
-
-        
-          
-            <span class="post-comments-count">
-            &nbsp; | &nbsp;
-            <a href="/2015/07/16/first/#comments" >
-              <span class="post-comments-count disqus-comment-count" data-disqus-identifier="2015/07/16/first/"></span>
-            </a>
-          </span>
-          
-        
-      </div>
-    </div>
-
-    <div class="post-body">
-
-      
-      
-
-      
-        
-          <p><img src="/img/post1.jpg" alt="head_image"><br>因为当初不写测试<br>
-          <div class="post-more-link text-center">
-            <a class="btn" href="/2015/07/16/first/#more">
-              阅读全文 &raquo;
-            </a>
-          </div>
-        
-      
-    </div>
-
-    <div class="post-footer">
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </div>
-  </div>
-
-
     
   </div>
 
-  
 
         </div>
 
@@ -460,6 +268,15 @@
   <div id="sidebar" class="sidebar">
     <div class="sidebar-inner">
 
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
       
 
       <div class="site-overview">
@@ -520,6 +337,17 @@
         
       </div>
 
+      
+        <div class="post-toc-wrap sidebar-panel-active">
+          <div class="post-toc-indicator-top post-toc-indicator"></div>
+          <div class="post-toc">
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#三种预加载方式"><span class="nav-text">三种预加载方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#假如"><span class="nav-text">假如</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#preload"><span class="nav-text">preload</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#eager_load"><span class="nav-text">eager_load</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#includes"><span class="nav-text">includes</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#结合使用association来实现预加载"><span class="nav-text">结合使用association来实现预加载</span></a></li></ol></div>
+            
+          </div>
+          <div class="post-toc-indicator-bottom post-toc-indicator"></div>
+        </div>
       
 
     </div>
@@ -582,6 +410,145 @@
   <script type="text/javascript" src="/js/search-toggle.js"></script>
 
   
+  
+<script type="text/javascript" src="/js/bootstrap.scrollspy.js?v=0.4.3" id="bootstrap.scrollspy.custom"></script>
+
+
+<script type="text/javascript" id="sidebar.toc.highlight">
+  $(document).ready(function () {
+    var tocSelector = '.post-toc';
+    var $tocSelector = $(tocSelector);
+    var activeCurrentSelector = '.active-current';
+
+    $tocSelector
+      .on('activate.bs.scrollspy', function () {
+        var $currentActiveElement = $(tocSelector + ' .active').last();
+
+        removeCurrentActiveClass();
+        $currentActiveElement.addClass('active-current');
+
+        $tocSelector[0].scrollTop = $currentActiveElement.position().top;
+      })
+      .on('clear.bs.scrollspy', function () {
+        removeCurrentActiveClass();
+      });
+
+    function removeCurrentActiveClass () {
+      $(tocSelector + ' ' + activeCurrentSelector)
+        .removeClass(activeCurrentSelector.substring(1));
+    }
+
+    function processTOC () {
+      getTOCMaxHeight();
+      toggleTOCOverflowIndicators();
+    }
+
+    function getTOCMaxHeight () {
+      var $sidebarInner = $('.sidebar-inner');
+      var height = $('.sidebar').height() -
+                   $tocSelector.position().top -
+                   $('.post-toc-indicator-bottom').height();
+
+      $tocSelector.css('height', height);
+
+      return height;
+    }
+
+    function toggleTOCOverflowIndicators () {
+      tocOverflowIndicator(
+        '.post-toc-indicator-top',
+        $tocSelector.scrollTop() > 0 ? 'show' : 'hide'
+      );
+
+      tocOverflowIndicator(
+        '.post-toc-indicator-bottom',
+        $tocSelector.scrollTop() >= $tocSelector.find('ol').height() - $tocSelector.height() ? 'hide' : 'show'
+      )
+    }
+
+    $(document).on('sidebar.didShow', function () {
+      processTOC();
+    });
+
+    $('body').scrollspy({ target: tocSelector });
+    $(window).on('resize', function () {
+      if ( $('.sidebar').hasClass('sidebar-active') ) {
+        processTOC();
+      }
+    });
+
+    onScroll($tocSelector);
+
+    function onScroll (element) {
+      element.on('mousewheel DOMMouseScroll', function (event) {
+          var oe = event.originalEvent;
+          var delta = oe.wheelDelta || -oe.detail;
+          var self = this;
+
+          this.scrollTop += ( delta < 0 ? 1 : -1 ) * 30;
+          event.preventDefault();
+
+          toggleTOCOverflowIndicators();
+      });
+    }
+
+    function tocOverflowIndicator (indicator, action) {
+      $(indicator).velocity('stop').velocity({
+        opacity: action === 'show' ? 0.4 : 0
+      }, { duration: 100 });
+    }
+
+  });
+</script>
+
+
+  <script type="text/javascript" id="sidebar.nav">
+    $(document).ready(function () {
+      var html = $('html');
+
+      $('.sidebar-nav li').on('click', function () {
+        var item = $(this);
+        var activeTabClassName = 'sidebar-nav-active';
+        var activePanelClassName = 'sidebar-panel-active';
+        if (item.hasClass(activeTabClassName)) {
+          return;
+        }
+
+        var currentTarget = $('.' + activePanelClassName);
+        var target = $('.' + item.data('target'));
+
+        currentTarget.velocity('transition.slideUpOut', 200, function () {
+          target
+            .velocity('stop')
+            .velocity('transition.slideDownIn', 200)
+            .addClass(activePanelClassName);
+        });
+
+        item.siblings().removeClass(activeTabClassName);
+        item.addClass(activeTabClassName);
+      });
+
+      $('.post-toc a').on('click', function (e) {
+        e.preventDefault();
+        var offset = $(escapeSelector(this.getAttribute('href'))).offset().top;
+        html.velocity('stop').velocity('scroll', {
+          offset: offset  + 'px',
+          mobileHA: false
+        });
+      });
+
+      // Expand sidebar on post detail page by default, when post has a toc.
+      var $tocContent = $('.post-toc-content');
+      if (isDesktop() && CONFIG.sidebar === 'post') {
+        if ($tocContent.length > 0 && $tocContent.html().trim().length > 0) {
+          displaySidebar();
+        }
+      }
+    });
+  </script>
+
+
+
 
   <script type="text/javascript">
     $(document).ready(function () {
@@ -601,9 +568,9 @@
 
     <script type="text/javascript">
       var disqus_shortname = 'zkunblog';
-      var disqus_identifier = 'index.html';
-      var disqus_title = '';
-      var disqus_url = '';
+      var disqus_identifier = '2015/08/17/post4_rails数据预加载/';
+      var disqus_title = 'Rails数据预加载 includes eager_load preload';
+      var disqus_url = 'http://yoursite.com/2015/08/17/post4_rails数据预加载/';
 
       function run_disqus_script(disqus_script){
         var dsq = document.createElement('script');
@@ -614,6 +581,8 @@
       }
 
       run_disqus_script('count.js');
+      
+        run_disqus_script('embed.js');
       
     </script>
   

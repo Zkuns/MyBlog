@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2015-07-26T07:16:11.000Z</updated>
+  <updated>2015-08-17T13:49:34.000Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -14,6 +14,58 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[Rails数据预加载 includes eager_load preload]]></title>
+    <link href="http://yoursite.com/2015/08/17/post4_rails%E6%95%B0%E6%8D%AE%E9%A2%84%E5%8A%A0%E8%BD%BD/"/>
+    <id>http://yoursite.com/2015/08/17/post4_rails数据预加载/</id>
+    <published>2015-08-17T13:49:55.000Z</published>
+    <updated>2015-08-17T13:49:34.000Z</updated>
+    <content type="html"><![CDATA[<p><img src="/img/post4.jpg" alt="head_image"></p>
+<p>前些天因为想减少站点的sql查询，过程中遇到些问题，搜解决办法时看到一篇文章，受益匪浅，想把自己的看完的理解总结然后分享一下，如果有不对的地方，求指导。</p>
+<p><a href="http://blog.arkency.com/2013/12/rails4-preloading" target="_blank" rel="external">原文章地址请点在这里</a></p>
+<h2 id="三种预加载方式">三种预加载方式</h2><p>我们在rails中有三种方式可以用来预加载数据，分别是 eager_load preload includes. 但是实际上预加载的方式就只有两种，preload和eager_load, 而includes是做什么的呢？它是内部自行判断，然后调用preload或是eager_load。</p>
+<h2 id="假如">假如</h2><p>有个 User(用户) model 还有一个Post(帖子) model，它们是一对多的关系</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">user has_many posts</span><br></pre></td></tr></table></figure>
+<p>首先先看看使用preload和eager_load这两中加载方法有什么区别</p>
+<h2 id="preload">preload</h2><p>使用preload将查出用户的时候预加载出用户发的帖子</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.preload(<span class="symbol">:posts</span>)</span><br><span class="line"><span class="comment">#select “users”.* from “users"</span></span><br><span class="line"><span class="comment">#select “posts”.* from “posts” where “posts”. “user_id” IN (1, 2, 3)</span></span><br></pre></td></tr></table></figure>
+<p>它生成两句sql语句，第二句预加载了posts表的内容。但是这种方式有个弊端，当你在预加载的时候想给预加载的表加上条件的时候就有问题了,比如我想加载用户的同时加载这个用户点赞高于100的例子</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.preload(<span class="symbol">:posts</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>)</span><br><span class="line"><span class="comment">#报错</span></span><br></pre></td></tr></table></figure>
+<p>因为preload这种加载方式是使用两句查询语句，并没有join posts表, 所以不能这样给post加上条件</p>
+<p>想要给预加载的表加上条件，那就试试使用eager_load的方式来预加载</p>
+<h2 id="eager_load">eager_load</h2><p>因为sql太长所以分了几行</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:posts</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#select "users"."id" AS t0_r0, "users"."name" AS t0_r1, "users"."email" AS t0_r2,</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#"posts"."id" AS t1_r0, "posts"."title" AS t1_r1,"posts"."like_count" AS t1_r2, "posts"."users_id" AS t1_r3</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#from "users" left outer join "posts" on "posts"."users_id" = "users"."id"</span></span><br></pre></td></tr></table></figure>
+<p>可以看到最后一行eager_load预加载数据是将users和posts做了左连接，所以eager_load是可以给post加上条件查询语句的，即：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:posts</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+<p>生成的sql语句为，前面两行相等，最后一行多了个查询条件：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">from <span class="string">"users"</span> left outer join <span class="string">"posts"</span> on <span class="string">"posts"</span>.<span class="string">"users_id"</span> = <span class="string">"users"</span>.<span class="string">"id"</span> where (posts.like_count &gt; <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+<p>看，条件查询就可以正常使用了。其实preload也是可以实现条件加载，下面会说到。</p>
+<h2 id="includes">includes</h2><p>最后说一下inludes, 在Rails3中includes它是可以自行判断这种一对多的预加载条件查询的，即当你使用</p>
+<p>User.includes(‘posts’)<br>它会调用<br>User.preload(‘posts’)<br>当使用<br>User.includes(‘posts’).where(“posts.like_count &gt; ?”, 100)<br>它会自行调用<br>User.eager_load(‘posts’).where(“posts.like_count &gt; ?”, 100)</p>
+<p>但是在Rails4中使用，就会报错,报错信息里面有着详细解释,截取一段</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.includes(<span class="string">'posts'</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">#DEPRECATION WARNING: It looks like you are eager loading table(s)</span></span><br><span class="line"><span class="comment"># (one of: users, addresses) that are referenced in a string SQL</span></span><br><span class="line"><span class="comment"># snippet. For example:</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#    Post.includes(:comments).where("comments.title = 'foo'")</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment"># Currently, Active Record recognizes the table in the string, and knows</span></span><br><span class="line"><span class="comment"># to JOIN the comments table to the query, rather than loading comments</span></span><br><span class="line"><span class="comment"># in a separate query. However, doing this without writing a full-blown</span></span><br><span class="line"><span class="comment"># SQL parser is inherently flawed. Since we don't want to write an SQL</span></span><br><span class="line"><span class="comment"># parser, we are removing this functionality. From now on, you must explicitly</span></span><br><span class="line"><span class="comment"># tell Active Record when you are referencing a table from a string</span></span><br><span class="line"><span class="comment">#</span></span><br><span class="line"><span class="comment">#   Post.includes(:comments).where("comments.title = 'foo'").references(:comments)</span></span><br><span class="line"><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p>原来这种自行判断的方法在Rails4时被去掉了，在预加载对象时使用判断语句，它还是会使用preload。</p>
+<p>有两个办法解决:</p>
+<p>一个是直接调用eager_load</p>
+<p>另一个是像上面报错信息里面举得例子一样使用references</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.includes(<span class="string">'posts'</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>).references(<span class="symbol">:posts</span>)</span><br><span class="line"><span class="comment">#或是</span></span><br><span class="line"><span class="constant">User</span>.preload(<span class="string">'posts'</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>).references(<span class="symbol">:posts</span>)</span><br></pre></td></tr></table></figure>
+<p>两个方法生成的sql语句都是一样的，都是左连接查询</p>
+<h2 id="结合使用association来实现预加载">结合使用association来实现预加载</h2><p>其实preload或是eager_load还可以通过association实现预加载</p>
+<p>例如：<br>在user的model中加入</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">has_many <span class="symbol">:popular_posts</span>, <span class="symbol">condition:</span> &#123;like_count &gt; <span class="number">100</span>&#125;, <span class="symbol">class_name:</span> <span class="string">'Post'</span></span><br></pre></td></tr></table></figure>
+<p>使用preload来预加载会生成两条sql语句来查询</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.preload(<span class="symbol">:popular_posts</span>)</span><br><span class="line"><span class="comment">#生成的sql语句</span></span><br><span class="line"><span class="comment">#select "users".* from "users"</span></span><br><span class="line"><span class="comment">#select "posts".* from "posts" where "posts"."like_count" &gt; 100 AND "posts"."user_id" in (1, 2, 3)</span></span><br><span class="line"><span class="comment">#</span></span><br></pre></td></tr></table></figure>
+<p>使用eager_load效果</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:popular_posts</span>)</span><br><span class="line"><span class="comment">#生成sql语句和下面一样，都是左链接</span></span><br><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:posts</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p><img src="/img/post4.jpg" alt="head_image"></p>
+<p>前些天因为想减少站点的sql查询，过程中遇到些问题，搜解决办法时看到一篇文章，受益匪浅，想把自己的看完的理解总结然后分享一下，如果有不对的地方，求指导。</p>
+<p><a]]>
+    </summary>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[使用factory_girl_seeds添加测试种子数据]]></title>
