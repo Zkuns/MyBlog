@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2015-08-26T10:22:08.000Z</updated>
+  <updated>2015-08-26T10:25:31.000Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title><![CDATA[post5webmock]]></title>
+    <title><![CDATA[webmock解决测试外部链接问题]]></title>
     <link href="http://yoursite.com/2015/08/26/post5webmock/"/>
     <id>http://yoursite.com/2015/08/26/post5webmock/</id>
     <published>2015-08-26T10:15:11.000Z</published>
-    <updated>2015-08-26T10:22:08.000Z</updated>
+    <updated>2015-08-26T10:25:31.000Z</updated>
     <content type="html"><![CDATA[<p>前段时间测试api的时候，遇到个问题，有的api内部是需要访问外部的api。但是测试环境下得数据都是假的，所以访问外部的api，得到的返回结果都是不对的，所以我需要一个假的外部api的返回值。<br><a id="more"></a></p>
 <p>网上google了一下，找到了一个gem， webmock，很强大的，可以自己定制的http返回</p>
 <p>例子：</p>
