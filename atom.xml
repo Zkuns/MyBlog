@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2015-08-24T02:04:53.000Z</updated>
+  <updated>2015-08-26T10:22:08.000Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -16,13 +16,37 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
+    <title><![CDATA[post5webmock]]></title>
+    <link href="http://yoursite.com/2015/08/26/post5webmock/"/>
+    <id>http://yoursite.com/2015/08/26/post5webmock/</id>
+    <published>2015-08-26T10:15:11.000Z</published>
+    <updated>2015-08-26T10:22:08.000Z</updated>
+    <content type="html"><![CDATA[<p>前段时间测试api的时候，遇到个问题，有的api内部是需要访问外部的api。但是测试环境下得数据都是假的，所以访问外部的api，得到的返回结果都是不对的，所以我需要一个假的外部api的返回值。<br><a id="more"></a></p>
+<p>网上google了一下，找到了一个gem， webmock，很强大的，可以自己定制的http返回</p>
+<p>例子：</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stub_request(<span class="symbol">:get</span>, ‘www.geekpark.net’).<span class="keyword">return</span> (<span class="symbol">body:</span> ‘abcdefg’, <span class="symbol">status:</span> <span class="number">200</span>)</span><br></pre></td></tr></table></figure>
+<p>就可以直接阻止去www.gekpark.net的get请求，并返回’abcdefg’</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">Net::HTTP</span>.get(‘www.geekpark.net’, ‘/‘)   <span class="comment"># “abcdefg\n”</span></span><br></pre></td></tr></table></figure>
+<p>我使用的是rspec测试，所以我的解决办法就<br>在spec_helper.rb中</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">config.before(<span class="symbol">:each</span>) <span class="keyword">do</span></span><br><span class="line">  stub_request(<span class="symbol">:any</span>, <span class="string">'http://www.geekpark.net/api/user'</span>).to_return <span class="keyword">do</span> |request|</span><br><span class="line">     hi = <span class="string">"what you want"</span></span><br><span class="line">    &#123; <span class="symbol">body:</span> hi, <span class="symbol">status:</span> <span class="number">200</span> &#125;</span><br><span class="line">  <span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>这样在我的每个测试之前就能运行 stub_request ，在这里的to_return的代码块中的request就是被拦截下的http请求。你可以获取request中不同的值来返回不同的结果。</p>
+<p>更详细的用法，请看<a href="https://github.com/bblimke/webmock" target="_blank" rel="external">https://github.com/bblimke/webmock</a></p>
+<p>还有一个要注意，在gemfile中这个gem放在了哪个环境的group中后就会将当前环境外部请求阻止掉，所以在test中使用就只放到test 的group下就好了。</p>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>前段时间测试api的时候，遇到个问题，有的api内部是需要访问外部的api。但是测试环境下得数据都是假的，所以访问外部的api，得到的返回结果都是不对的，所以我需要一个假的外部api的返回值。<br>]]>
+    
+    </summary>
+    
+  </entry>
+  
+  <entry>
     <title><![CDATA[Rails数据预加载 includes eager_load preload]]></title>
     <link href="http://yoursite.com/2015/08/17/post4_rails%E6%95%B0%E6%8D%AE%E9%A2%84%E5%8A%A0%E8%BD%BD/"/>
     <id>http://yoursite.com/2015/08/17/post4_rails数据预加载/</id>
     <published>2015-08-17T13:49:55.000Z</published>
-    <updated>2015-08-24T02:04:53.000Z</updated>
-    <content type="html"><![CDATA[<p><img src="/img/post4.jpg" alt="head_image"></p>
-<p>前些天因为想减少站点的sql查询，过程中遇到些问题，搜解决办法时看到一篇文章，受益匪浅，想把自己的看完的理解总结然后分享一下，如果有不对的地方，求指导。<br><a id="more"></a></p>
+    <updated>2015-08-24T02:06:00.000Z</updated>
+    <content type="html"><![CDATA[<p><img src="/img/post4.jpg" alt="head_image"><br>前些天因为想减少站点的sql查询，过程中遇到些问题，搜解决办法时看到一篇文章，受益匪浅，想把自己的看完的理解总结然后分享一下，如果有不对的地方，求指导。<br><a id="more"></a></p>
 <p><a href="http://blog.arkency.com/2013/12/rails4-preloading" target="_blank" rel="external">原文章地址请点在这里</a></p>
 <h2 id="三种预加载方式">三种预加载方式</h2><p>我们在rails中有三种方式可以用来预加载数据，分别是 eager_load preload includes. 但是实际上预加载的方式就只有两种，preload和eager_load, 而includes是做什么的呢？它是内部自行判断，然后调用preload或是eager_load。</p>
 <h2 id="假如">假如</h2><p>有个 User(用户) model 还有一个Post(帖子) model，它们是一对多的关系</p>
@@ -60,8 +84,7 @@
 <figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:popular_posts</span>)</span><br><span class="line"><span class="comment">#生成sql语句和下面一样，都是左链接</span></span><br><span class="line"><span class="constant">User</span>.eager_load(<span class="symbol">:posts</span>).where(<span class="string">"posts.like_count &gt; ?"</span>, <span class="number">100</span>)</span><br></pre></td></tr></table></figure>
 ]]></content>
     <summary type="html">
-    <![CDATA[<p><img src="/img/post4.jpg" alt="head_image"></p>
-<p>前些天因为想减少站点的sql查询，过程中遇到些问题，搜解决办法时看到一篇文章，受益匪浅，想把自己的看完的理解总结然后分享一下，如果有不对的地方，求指导。<br>]]>
+    <![CDATA[<p><img src="/img/post4.jpg" alt="head_image"><br>前些天因为想减少站点的sql查询，过程中遇到些问题，搜解决办法时看到一篇文章，受益匪浅，想把自己的看完的理解总结然后分享一下，如果有不对的地方，求指导。<br>]]>
     
     </summary>
     
