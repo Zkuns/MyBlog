@@ -5,7 +5,7 @@
   
   <link href="/atom.xml" rel="self"/>
   <link href="http://yoursite.com//"/>
-  <updated>2016-07-27T11:25:05.000Z</updated>
+  <updated>2017-02-27T15:43:10.000Z</updated>
   <id>http://yoursite.com//</id>
   
   <author>
@@ -14,6 +14,128 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title><![CDATA[读ruby程序员修炼之道笔记（1）]]></title>
+    <link href="http://yoursite.com/2017/02/27/post7-rubyist/"/>
+    <id>http://yoursite.com/2017/02/27/post7-rubyist/</id>
+    <published>2017-02-27T15:37:08.000Z</published>
+    <updated>2017-02-27T15:43:10.000Z</updated>
+    <content type="html"><![CDATA[<p>看了ruby程序员修炼之道，记录了一些，自己不知道或者不清楚的一些地方，做一个读书笔记，方面以后查阅。<br><a id="more"></a></p>
+<h3 id="require，load使用和区别">require，load使用和区别</h3><blockquote>
+<p>require和load在ruby中，都是用来加载文件的，load它回家再多次，并且加载成功后返回true，require回阻止你多次加载，当同一个文件被加载两次，第二次将不会加载，并且返回false。</p>
+<p>require加载文件的时候是不用添加文件名后缀（.rb）,但是load得加上。</p>
+<p>当ruby使用require加载文件的时候，总是会遍历一系列加载目录，这些目录通过输出 $: 符号就可以获得。<code>ruby -e &#39;puts $:&#39;</code></p>
+<p>require不会自动包含但当前目录，所以想要包含当前目录得，<code>require &#39;./test.rb&#39;</code>, 或者将当前目录添加到加载路径中去，<code>$: &lt;&lt; &#39;.&#39;</code>.</p>
+<p>require_relative会搜索当前目录，就可以不用把当前目录添加到加载路径中了。</p>
+</blockquote>
+<h3 id="为什么ruby没有++或者—方法">为什么ruby没有++或者—方法</h3><blockquote>
+<p>因为在ruby里面对于 整数，符号，true，false，nil其实都是立即值（immediate value），他们的特点就是只有一个，即1这个数字在ruby中其实只有一个，无论它被赋值多少次，他们总是指定到同一个1，当你这样写的时候</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1</span></span><br><span class="line">x ++</span><br></pre></td></tr></table></figure>
+<p>x就是1，其实就是1++，这相当于把1变成了2，所以这个是不合理的。</p>
+</blockquote>
+<h3 id="freeze，clone和dup">freeze，clone和dup</h3><blockquote>
+<p>当你不希望某个对象，不被改变的时候，那就可以直接<code>objec.freeze</code>冻结这个对象。或者使用clone或者dup方法获得一个复制品，来使用.</p>
+<p>这里需要注意的是当你clone了一个freeze对象的时候，获取的结果也是一个freeze对象。dup则相反。</p>
+<p>freeze对象后，是没有对应的unfreeze方法的，所以可以通过dup方法的特性，来获取这个对象的可修改复制品。</p>
+<p>freeze冻结数组后，虽然不可以修改数组，但是数组中如果元素是可修改对象的话，那还是能够改变这个元素的。</p>
+</blockquote>
+<h3 id="常量">常量</h3><blockquote>
+<p>常量在ruby中是可以重新赋值的，因为ruby是可以多次加载程序文件的，而且文件中可能会包含常量的赋值，所以如果禁止常量重新赋值的话将会导致文件重加载错误。</p>
+</blockquote>
+<h3 id="include和prepend">include和prepend</h3><blockquote>
+<p>他们都是将模块混合到当前类中，但是prepend会将模块在方法查询链中置于当前类之前，所以当类中的方法和添加进来的模块的方法重名时，将会执行模块中的方法。</p>
+</blockquote>
+<h3 id="super">super</h3><blockquote>
+<p>当方法内想调用父类方法的时候，使用super关键字，无需传入参数，它将自己将对应参数传入父类对应的方法中.当然可以自己加入括号传入参数。</p>
+</blockquote>
+<h3 id="self">self</h3><blockquote>
+<p>当调用对象的set方法的，得显示的调用，不然会认为是局部变量赋值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> </span>a= tmp</span><br><span class="line">		<span class="variable">@a</span> = tmp</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> </span>test</span><br><span class="line">		<span class="keyword">self</span>.a = <span class="string">"abc"</span> <span class="comment">#这里需要加上self</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="类变量">类变量</h3><blockquote>
+<p>类变量虽然不怎么用，但是还是得了解一下。<br>类变量是属于类层级作用域的。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line">	<span class="variable">@@a</span> = <span class="string">'abc'</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> </span>print</span><br><span class="line">		puts <span class="variable">@aa</span>    <span class="comment"># abc</span></span><br><span class="line">		<span class="variable">@aa</span> = <span class="string">'abcd'</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	puts <span class="variable">@@a</span>		  <span class="comment"># abcd	</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+<p>但是它在类的继承中还是使用了一个相同的对象，所以如果一个类的父类有个类对象，那么这个类也同时能够使用和修改这个类对象。如果想每一个类拥有一个只在自己作用域使用的对象，不与其他子类或父类共享的话，那就在可以使用类的实例对象做替代。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line">	<span class="variable">@a</span> = <span class="string">'abc'</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> </span>print</span><br><span class="line">		puts <span class="constant">A</span>.a  <span class="comment"># abc</span></span><br><span class="line">		<span class="constant">A</span>.test()</span><br><span class="line">		puts <span class="constant">A</span>.a  <span class="comment"># abcd</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="class"><span class="keyword">class</span> <span class="inheritance">&lt;</span><span class="inheritance">&lt; <span class="parent">self</span></span></span></span><br><span class="line">		<span class="keyword">attr_reader</span> <span class="symbol">:a</span></span><br><span class="line">		<span class="function"><span class="keyword">def</span> </span>test</span><br><span class="line">			<span class="variable">@a</span> = <span class="string">'abcd'</span></span><br><span class="line">		<span class="keyword">end</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="私有的set方法">私有的set方法</h3><blockquote>
+<p>私有方法是不能显示指明接受对象的。而set方法又需要显示指明调用对象self，所以当private方法是set方法的时候还是可以指定self为接受对象的。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span></span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> </span>a= tmp</span><br><span class="line">		<span class="variable">@a</span> = tmp</span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	<span class="function"><span class="keyword">def</span> </span>test</span><br><span class="line">		<span class="keyword">self</span>.a = <span class="string">"abc"</span> <span class="comment">#这里需要加上self</span></span><br><span class="line">	<span class="keyword">end</span></span><br><span class="line">	private <span class="symbol">:a=</span></span><br><span class="line"><span class="keyword">end</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="保护方法">保护方法</h3><blockquote>
+<p>保护方法一直不清楚作用，它其实就是在调用的区域的self的class必须和调用这个方法的对象的class是一样或者是同一个继承系的。。。。。</p>
+</blockquote>
+<h3 id="顶层方法">顶层方法</h3><blockquote>
+<p>在顶层作用域定义方法，main作为self对象，其实只是将这些方法定义到了object类的private方法中去了，不能显示调用这个方法，而object又是所有对象的父类，所以这个方法到哪都可以调用（除了BasicObject这个对象）</p>
+</blockquote>
+<h3 id="条件体中的局部变量">条件体中的局部变量</h3><blockquote>
+<p>虽然赋值没有执行，但是在运行之前解析器推断出有a这个变量，所以给了它一个空间，但是并没有赋值。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="keyword">false</span></span><br><span class="line">	a = <span class="string">'dog'</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">puts a   <span class="comment">#nil</span></span><br><span class="line">puts b	  <span class="comment"># error no such object</span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<h3 id="case">case</h3><blockquote>
+<p>case在ruby中其实是默认调用了===方法</p>
+</blockquote>
+<h3 id="==，===，eql?,_equal?">==，===，eql?, equal?</h3><blockquote>
+<p>== 用于判断两个对象是否相等</p>
+<p>=== 类似于==，但是还用于case判断，判断 String === ‘abc’</p>
+<p>eql? 在hash中用来比较两个key值是不是相等的，在object对象中则相等于==，但是在Numeric中有不一样。<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span> == <span class="number">1.0</span>	<span class="keyword">true</span></span><br><span class="line"><span class="number">1</span>.eql? <span class="number">1.0</span> <span class="keyword">false</span></span><br></pre></td></tr></table></figure></p>
+<p>equal？ 用于比较两个对象的object_id是否相等。不能被重写</p>
+<p>在严格意义上我觉得 === &lt; == &lt; eql? &lt; equal?</p>
+</blockquote>
+<h3 id="代码块中的局部变量">代码块中的局部变量</h3><blockquote>
+<p>代码块中是可以调用外部的局部变量的，但是代码块中定义的局部变量外部是访问不了的。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>.times <span class="keyword">do</span></span><br><span class="line">	x = <span class="number">1</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">puts x   <span class="comment"># error no such object</span></span><br></pre></td></tr></table></figure>
+<p>如果你想在代码块中定义和代码块外面名字一样的局部变量的时候，需要这样才不会影响到外部的局部变量。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">x = <span class="number">1</span></span><br><span class="line"><span class="number">1</span>.times <span class="keyword">do</span> |i; x| <span class="comment">#这里是分号</span></span><br><span class="line">	x = <span class="number">100</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">puts x   <span class="comment"># 1</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<h3 id="一元运算符">一元运算符</h3><blockquote>
+<p>想要使用-obj或者+obj这一类方法的时候，只需定于 +@或者-@ 这两个方法就行。<br>！这个方法的定义会影响到not关键字。</p>
+</blockquote>
+<h3 id="定义to_str和to_ary方法。">定义to_str和to_ary方法。</h3><blockquote>
+<p>to_str, 使用当调用到某个对象作为为字符串参数的时候会自己调用to_str方法，to_ary也一样。</p>
+</blockquote>
+<h3 id="Comparable">Comparable</h3><blockquote>
+<p>给予对象比较功能，但是得定义一个&lt;=&gt;方法，返回 -1，0，1分别代表小于，等于，大于。</p>
+</blockquote>
+<h3 id="获得方法名">获得方法名</h3><blockquote>
+<p>methods获得对象所有方法</p>
+<p>instance_methods获得对实例方法,可传入参数false表示不包括祖先类中的方法</p>
+<p>以上还有对应的不同权限版，例如：private_methods</p>
+<p>singleton_methods获得单例方法</p>
+</blockquote>
+<h3 id="字符串">字符串</h3><blockquote>
+<p>%q{abcj} 类似于单引号,不一定要是{}，别的只要能够闭合的，或者是相同的符号都行，不能是字母， %Q类似于双引号的表现形式。</p>
+<p>here doc 使用&lt;&lt;运算符 结尾为 运算符，单引号的表现形式，想要成为双引号的表现形式之需要将起始的运算符放到单引号中就行。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">str = &lt;&lt;<span class="string">'EOF'</span></span><br><span class="line">	whos your daddy</span><br><span class="line"><span class="constant">EOF</span></span><br></pre></td></tr></table></figure>
+</blockquote>
+<p>其实开头&lt;&lt;运算符就是代表后面的文档字符串的，所以可以在后面接运算符<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">result = &lt;&lt;<span class="constant">EOF</span>.to_i * <span class="number">2</span></span><br><span class="line">	<span class="number">5</span></span><br><span class="line"><span class="constant">EOF</span></span><br><span class="line">result  <span class="comment"># 10</span></span><br></pre></td></tr></table></figure></p>
+<h3 id="Array方法">Array方法</h3><blockquote>
+<p>注意通过Array的new方法创建特定长度一样的元素的实例的时候，注意这里返回的数组内三个字符串都是指定的同一个元素。所以当你改变其中一个，另外两个都会跟着改变。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">Array</span>.new(<span class="number">3</span>, <span class="string">'abc'</span>)</span><br><span class="line">[<span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span>]</span><br></pre></td></tr></table></figure>
+<p>所以这里需要这样实例化，block被执行了三次，返回了三个不一样的string对象。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">Array</span>.new(<span class="number">3</span>) &#123; <span class="string">'abc'</span> &#125;</span><br><span class="line">[<span class="string">'abc'</span>, <span class="string">'abc'</span>, <span class="string">'abc'</span>]</span><br></pre></td></tr></table></figure>
+<p>通过%w和%i也能实例化数组<br><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">%w&#123;abc def ghi&#125;</span>    =&gt; [<span class="string">'abc'</span>, <span class="string">'def'</span>, <span class="string">'ghi'</span>]</span><br><span class="line"><span class="string">%W&#123;abc <span class="subst">#&#123;<span class="number">1</span>+<span class="number">1</span>&#125;</span> ghi&#125;</span> =&gt; [<span class="string">'abc'</span>, <span class="string">'2'</span>, <span class="string">'ghi'</span>]</span><br><span class="line">%i&#123;abc <span class="function"><span class="keyword">def</span> </span>ghi&#125;	  =&gt; [<span class="symbol">:abc</span>, <span class="symbol">:def</span>, <span class="symbol">:ghi</span>]</span><br><span class="line">%<span class="constant">I</span>&#123;abc <span class="comment">#&#123;1+1&#125; ghi&#125; =&gt; [:abc', :2, :ghi]</span></span><br></pre></td></tr></table></figure></p>
+<p>Array的concat方法会改变方法接受者，所以想要不改变原对象可以使用 + 代替. </p>
+</blockquote>
+<h3 id="Hash方法">Hash方法</h3><blockquote>
+<p>Hash的new方法可以传入参数作为，取一个不存在的key值的值的时候返回，注意这里不是赋值。当然也可以是一个block，用于取不存在的key值的时候赋值一个默认值。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">a = <span class="constant">Hash</span>.new(<span class="number">0</span>)</span><br><span class="line">b = <span class="constant">Hash</span>.new()&#123; |hash, key|</span><br><span class="line">	hash[key] = <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>Hash也有这个它自己的构造函数，可以传入一个偶数个数的数组，或者是一个二位数据，它会自己映射成为一个hash。</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="constant">Hash</span>[<span class="string">'a'</span>, <span class="string">'b'</span>, <span class="string">'c'</span>, <span class="string">'d'</span>]</span><br><span class="line">&#123; <span class="string">'a'</span> =&gt; <span class="string">'b'</span>, <span class="string">'c'</span> =&gt; <span class="string">'d'</span> &#125;</span><br><span class="line"><span class="constant">Hash</span>[[[<span class="string">'a'</span>, <span class="string">'b'</span>], [<span class="string">'c'</span>, <span class="string">'d'</span>]]]</span><br><span class="line">&#123; <span class="string">'a'</span> =&gt; <span class="string">'b'</span>, <span class="string">'c'</span> =&gt; <span class="string">'d'</span> &#125;</span><br></pre></td></tr></table></figure>
+<p>hash还有一系列获取方法，fetch当key不存在的时候，返回’default value’，获取好几个key的数值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hash.fetch(<span class="string">'key'</span>, <span class="string">'default value'</span>)</span><br><span class="line">hash.values_at(<span class="string">'key1'</span>, <span class="string">'key2'</span>)</span><br></pre></td></tr></table></figure>
+<p>在方法的定义中，是可以使用hash来做参数keyword的，甚至是默认值</p>
+<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">def</span> </span>test <span class="symbol">a:</span> , <span class="symbol">b:</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">test(<span class="symbol">a:</span> <span class="number">1</span>, <span class="symbol">b:</span><span class="number">2</span>)</span><br><span class="line"><span class="function"><span class="keyword">def</span> </span>test <span class="symbol">a:</span> <span class="number">1</span>, <span class="symbol">b:</span><span class="number">2</span>, **c  <span class="comment">#注意这里是两个*</span></span><br><span class="line"><span class="keyword">end</span></span><br><span class="line">test(<span class="symbol">b:</span><span class="number">3</span>, <span class="symbol">x:</span> <span class="number">4</span>, <span class="symbol">y:</span> <span class="number">5</span>)</span><br></pre></td></tr></table></figure>
+</blockquote>
+]]></content>
+    <summary type="html">
+    <![CDATA[<p>看了ruby程序员修炼之道，记录了一些，自己不知道或者不清楚的一些地方，做一个读书笔记，方面以后查阅。<br>]]>
+    
+    </summary>
+    
+      <category term="ruby" scheme="http://yoursite.com/tags/ruby/"/>
+    
+  </entry>
   
   <entry>
     <title><![CDATA[给app添加3Dtouch之QuickAction]]></title>
